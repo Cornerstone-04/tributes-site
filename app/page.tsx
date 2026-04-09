@@ -1,18 +1,19 @@
-import { Button } from "@/components/ui/button";
+import { HeroSection } from "@/components/home/hero-section";
+import { LandingCta } from "@/components/home/landing-cta";
+import { TimelineSection } from "@/components/home/timeline-section";
+import { Footer } from "@/components/layout/footer";
+import { Navbar } from "@/components/layout/navbar";
+import { SectionDivider } from "@/components/shared/section-divider";
 
-export default function Home() {
+export default function LandingPage() {
   return (
-    <div className="bg-background text-foreground min-h-screen p-10">
-      <h1 className="text-4xl font-serif text-primary">
-        Celebrating 100 Years
-      </h1>
-
-      <Button
-        size="lg"
-        className="mt-6 bg-accent text-accent-foreground px-6 py-3 rounded-lg"
-      >
-        Write a Tribute
-      </Button>
-    </div>
+    <main className="min-h-screen bg-background text-foreground">
+      <Navbar />
+      <HeroSection />
+      <TimelineSection />
+      <SectionDivider />
+      <LandingCta />
+      <Footer />
+    </main>
   );
 }

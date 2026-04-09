@@ -1,29 +1,28 @@
+import { notFound } from "next/navigation";
 import { TributeForm } from "@/components/tribute/tribute-form";
-import Link from "next/link";
+import { getTributeById } from "@/lib/tributes";
+import { PageNav } from "@/components/layout/page-navbar";
 
-export default function NewTributePage() {
+export default async function EditTributePage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const tribute = await getTributeById(params.id);
+  if (!tribute) notFound();
+
   return (
     <main className="bg-[#FAF7F2] text-[#1C1410] min-h-screen font-serif">
-      <nav className="flex items-center justify-between px-8 py-5 border-b border-[#C9A96E]/20">
-        <Link
-          href="/"
-          className="text-sm tracking-[0.2em] uppercase text-[#8B6914] font-sans font-medium"
-        >
-          ← Olusola · 100
-        </Link>
-      </nav>
+      <PageNav backHref="/tributes" backLabel="← Back to Tribute" />
 
       <section className="max-w-2xl mx-auto px-6 py-20">
         <div className="text-center mb-14">
           <p className="text-xs tracking-[0.35em] uppercase text-[#8B6914] font-sans mb-4">
-            Share your memory
+            Editing
           </p>
           <h1 className="text-4xl font-serif text-[#1C1410] mb-4">
-            Write a Tribute
+            Update Tribute
           </h1>
-          <p className="text-[#1C1410]/50 font-sans font-light text-base max-w-sm mx-auto">
-            Your words will become part of a keepsake Baba will carry forever.
-          </p>
           <div className="flex items-center justify-center gap-4 mt-8">
             <div className="h-px w-16 bg-[#C9A96E]/40" />
             <span className="text-[#C9A96E]">✦</span>
@@ -31,7 +30,7 @@ export default function NewTributePage() {
           </div>
         </div>
 
-        <TributeForm mode="create" />
+        <TributeForm mode="edit" tribute={tribute} />
       </section>
     </main>
   );
