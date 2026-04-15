@@ -8,6 +8,8 @@ type Chapter = {
   heading: string;
   body: string;
   accent: string;
+  image?: string;
+  imageAlt?: string;
 };
 
 type Props = {
@@ -61,6 +63,32 @@ export function TimelineChapter({ chapter, index }: Props) {
         <p className="mt-4 font-heading text-sm italic text-accent/70">
           {chapter.accent}
         </p>
+      </div>
+      <div className="flex-1">
+        {chapter.image ? (
+          <motion.div
+            whileHover={{
+              y: -6,
+              scale: 1.02,
+              rotate: 0,
+            }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className={`mx-auto w-full max-w-sm ${
+              isEven ? "-rotate-2" : "rotate-2"
+            }`}
+          >
+            <div className="border border-accent/25 bg-[#f8f0dc] p-2 shadow-[0_12px_28px_rgba(28,20,16,0.12)]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={chapter.image}
+                alt={chapter.imageAlt ?? chapter.heading}
+                className="h-72 w-full object-cover"
+              />
+            </div>
+          </motion.div>
+        ) : (
+          <div className="hidden md:block" />
+        )}
       </div>
 
       <div className="hidden flex-1 md:block" />

@@ -44,14 +44,14 @@ export function AdminTributeRow({ tribute }: AdminTributeRowProps) {
 
       <div className="flex shrink-0 items-center gap-3">
         <Link
-          href={`/tributes/${tribute.id}`}
+          href={`/admin/tributes/${tribute.id}`}
           className="font-sans text-xs tracking-wide text-accent hover:underline"
         >
           View
         </Link>
 
         <Link
-          href={`/tributes/${tribute.id}/edit`}
+          href={`/admin/tributes/${tribute.id}/edit`}
           className="font-sans text-xs tracking-wide text-foreground/40 hover:text-accent"
         >
           Edit

@@ -1,32 +1,40 @@
 import { notFound } from "next/navigation";
-import { TributeForm } from "@/components/tribute/tribute-form";
 import { getTributeById } from "@/lib/tributes";
-import { PageNav } from "@/components/layout/page-navbar";
+import { AdminPageNav } from "@/components/admin/admin-page-nav";
+import { TributeForm } from "@/components/tribute/tribute-form";
 
-export default async function EditTributePage({
+export default async function AdminEditTributePage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const tribute = await getTributeById(params.id);
+  const { id } = await params;
+
+  const tribute = await getTributeById(id);
   if (!tribute) notFound();
 
   return (
-    <main className="bg-[#FAF7F2] text-[#1C1410] min-h-screen font-serif">
-      <PageNav backHref="/tributes" backLabel="← Back to Tribute" />
+    <main className="min-h-screen bg-background text-foreground">
+      <AdminPageNav />
 
-      <section className="max-w-2xl mx-auto px-6 py-20">
-        <div className="text-center mb-14">
-          <p className="text-xs tracking-[0.35em] uppercase text-[#8B6914] font-sans mb-4">
-            Editing
+      <section className="mx-auto max-w-2xl px-6 py-16">
+        <div className="mb-14 text-center">
+          <p className="mb-4 font-sans text-xs uppercase tracking-[0.35em] text-accent">
+            Editing Tribute
           </p>
-          <h1 className="text-4xl font-serif text-[#1C1410] mb-4">
+
+          <h1 className="mb-4 font-heading text-4xl text-primary">
             Update Tribute
           </h1>
-          <div className="flex items-center justify-center gap-4 mt-8">
-            <div className="h-px w-16 bg-[#C9A96E]/40" />
-            <span className="text-[#C9A96E]">✦</span>
-            <div className="h-px w-16 bg-[#C9A96E]/40" />
+
+          <p className="mx-auto max-w-md font-sans text-sm text-foreground/50">
+            Make changes to the tribute, then save to update the record.
+          </p>
+
+          <div className="mt-8 flex items-center justify-center gap-4">
+            <div className="h-px w-16 bg-accent/40" />
+            <span className="text-accent">✦</span>
+            <div className="h-px w-16 bg-accent/40" />
           </div>
         </div>
 

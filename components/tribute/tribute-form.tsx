@@ -158,7 +158,7 @@ export function TributeForm({ mode, tribute }: Props) {
 
     if (updateError) throw updateError;
 
-    router.push(`/tributes/${currentTribute.id}`);
+    router.push(`/admin/tributes/${currentTribute.id}`);
     router.refresh();
   }
 
