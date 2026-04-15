@@ -4,7 +4,7 @@ import { Tribute, TributeImage } from "@/types";
 export async function getApprovedTributes(): Promise<Tribute[]> {
   const { data, error } = await supabase
     .from("tributes")
-    .select("*")
+    .select("*, images:tribute_images(*)")
     .eq("status", "approved")
     .order("created_at", { ascending: false });
 

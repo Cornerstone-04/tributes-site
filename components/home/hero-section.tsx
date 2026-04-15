@@ -33,7 +33,7 @@ export function HeroSection() {
           transition={{ delay: 0.15, duration: 0.8 }}
           className="mb-6 font-sans text-xs tracking-[0.35em] uppercase text-accent"
         >
-          July 2025 · A Centennial Celebration
+          July 2026 · A Centennial Celebration
         </motion.p>
 
         <motion.h1
@@ -84,7 +84,7 @@ export function HeroSection() {
         </motion.div>
       </motion.div>
 
-      <motion.div
+      {/*<motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.1, duration: 1 }}
@@ -98,7 +98,7 @@ export function HeroSection() {
           transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
           className="h-10 w-px bg-accent/40"
         />
-      </motion.div>
+      </motion.div>*/}
     </section>
   );
 }

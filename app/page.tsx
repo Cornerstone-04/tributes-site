@@ -1,9 +1,9 @@
 import { HeroSection } from "@/components/home/hero-section";
 import { LandingCta } from "@/components/home/landing-cta";
+import { PhotoStrip } from "@/components/home/photo-strip";
 import { TimelineSection } from "@/components/home/timeline-section";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
-import { SectionDivider } from "@/components/shared/section-divider";
 
 export default function LandingPage() {
   return (
@@ -11,7 +11,7 @@ export default function LandingPage() {
       <Navbar />
       <HeroSection />
       <TimelineSection />
-      <SectionDivider />
+      <PhotoStrip />
       <LandingCta />
       <Footer />
     </main>

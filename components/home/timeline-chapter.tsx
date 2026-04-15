@@ -23,7 +23,7 @@ export function TimelineChapter({ chapter, index }: Props) {
       initial={{ opacity: 0, x: isEven ? -24 : 24, y: 24 }}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
       viewport={{ once: true, amount: 0.45 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
+      transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
       className={`relative flex flex-col items-center gap-12 md:flex-row ${
         isEven ? "md:flex-row" : "md:flex-row-reverse"
       }`}

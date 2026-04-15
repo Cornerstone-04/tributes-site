@@ -70,20 +70,26 @@ export function TributeForm({ mode, tribute }: Props) {
       );
     }
 
-    const tributeId = crypto.randomUUID();
-
-    const { error: insertError } = await supabase.from("tributes").insert({
-      id: tributeId,
-      full_name: form.full_name.trim(),
-      relationship: form.relationship.trim() || null,
-      title: form.title.trim() || null,
-      message: form.message.trim(),
-      voice_note_url: voiceNoteUrl,
-      voice_note_duration: voiceNoteDuration,
-      cover_image_url: coverImageUrl,
+    const res = await fetch("/api/tributes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        full_name: form.full_name.trim(),
+        relationship: form.relationship.trim() || null,
+        title: form.title.trim() || null,
+        message: form.message.trim(),
+        voice_note_url: voiceNoteUrl,
+        voice_note_duration: voiceNoteDuration,
+        cover_image_url: coverImageUrl,
+      }),
     });
 
-    if (insertError) throw insertError;
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.error || "Submission failed.");
+    }
+
+    const { id: tributeId } = await res.json(); // get the ID back
 
     if (images.length > 1 && tributeId) {
       for (let i = 1; i < images.length; i++) {
