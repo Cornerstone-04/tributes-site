@@ -6,6 +6,7 @@ export async function getApprovedTributes(): Promise<Tribute[]> {
     .from("tributes")
     .select("*, images:tribute_images(*)")
     .eq("status", "approved")
+    .order("featured", { ascending: false })
     .order("created_at", { ascending: false });
 
   if (error) {

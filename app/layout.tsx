@@ -1,16 +1,44 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const cormorantGaramond = Cormorant_Garamond({
+const garamond = localFont({
+  src: [
+    {
+      path: "../public/fonts/garamond/garamond-regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/garamond/garamond-medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/garamond/garamond-bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+  ],  
   variable: "--font-heading",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
-const inter = Inter({
+const gotham = localFont({
+  src: [
+    {
+      path: "../public/fonts/gotham/gotham-book.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/gotham/gotham-medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+  ],
   variable: "--font-sans",
-  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -26,7 +54,7 @@ export const metadata: Metadata = {
     siteName: "Papa Olusola Ajolore Tribute",
     images: [
       {
-        url: "/og-image.jpg", // put in public/
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Celebrating 100 Years",
@@ -57,7 +85,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cormorantGaramond.variable} ${inter.variable} h-full antialiased`}
+      className={`${garamond.variable} ${gotham.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

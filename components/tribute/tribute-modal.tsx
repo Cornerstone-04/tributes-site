@@ -11,7 +11,6 @@ import { Tribute, TributeImage } from "@/types";
 import { VoiceNotePlayer } from "@/components/tribute/voice-note-player";
 import { TributeGallery } from "@/components/tribute/tribute-gallery";
 import { XIcon } from "lucide-react";
-import { Button } from "../ui/button";
 
 type TributeModalProps = {
   tribute: Tribute | null;
@@ -36,19 +35,15 @@ export function TributeModal({
   return (
     <Dialog open={open} onOpenChange={modalOpenAction}>
       <DialogContent
-        showCloseButton
+        showCloseButton={false}
         className="max-h-[90vh] w-[95vw] max-w-5xl overflow-y-auto border-[#d8c39a] bg-[#f8f0dc] p-0 text-[#1c1410] shadow-[0_20px_60px_rgba(28,20,16,0.18)]"
       >
-        <DialogClose>
-          <Button
-            onClick={() => modalOpenAction(false)}
-            variant="ghost"
-            className="absolute top-2 right-2 z-50 text-[#1c1410] hover:text-[#1c1410]"
-            size="icon-sm"
-          >
-            <XIcon />
-            <span className="sr-only">Close</span>
-          </Button>
+        <DialogClose
+          className="absolute top-2 right-2 z-50 text-[#1c1410] hover:text-[#1c1410] size-7"
+          onClick={() => modalOpenAction(false)}
+        >
+          <XIcon />
+          <span className="sr-only">Close</span>
         </DialogClose>
 
         {/* Textures */}
@@ -125,7 +120,7 @@ export function TributeModal({
 
             {/* RIGHT (or full width) — message */}
             <div>
-              <p className="whitespace-pre-wrap font-sans text-base leading-loose text-[#1c1410]/78 md:text-lg">
+              <p className="whitespace-pre-wrap font-sans text-base leading-loose text-[#1c1410]/78">
                 {tribute.message}
               </p>
 
