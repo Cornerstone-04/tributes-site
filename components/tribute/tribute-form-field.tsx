@@ -11,20 +11,33 @@ export function TributeFormField({
   hint,
   children,
 }: TributeFormFieldProps) {
+  const hintId = hint ? `hint-${label.toLowerCase().replace(/\s+/g, "-")}` : undefined;
+
   return (
     <div className="space-y-2">
-      <div className="flex items-baseline justify-between">
+      <div className="flex items-baseline justify-between gap-4">
         <label className="font-sans text-xs uppercase tracking-[0.2em] text-foreground/60">
           {label}
-          {required ? <span className="ml-1 text-accent">*</span> : null}
+          {required ? (
+            <>
+              <span className="ml-1 text-accent" aria-label="required">
+                *
+              </span>
+            </>
+          ) : null}
         </label>
 
         {hint ? (
-          <span className="font-sans text-xs text-foreground/30">{hint}</span>
+          <span
+            id={hintId}
+            className="font-sans text-xs text-foreground/30 whitespace-nowrap"
+          >
+            {hint}
+          </span>
         ) : null}
       </div>
 
-      {children}
+      <div aria-describedby={hintId}>{children}</div>
     </div>
   );
 }

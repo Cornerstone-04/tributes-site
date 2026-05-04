@@ -46,11 +46,14 @@ export function TributeForm({ mode, tribute }: Props) {
     let voiceNoteDuration: number | null = null;
     let coverImageUrl: string | null = null;
 
+    // ===== PROCESS VOICE NOTE =====
     if (voiceNote) {
       voiceNoteDuration = await getAudioDuration(voiceNote);
 
       if (voiceNoteDuration > MAX_VOICE_NOTE_DURATION) {
-        throw new Error("Voice note exceeds 3 minutes.");
+        throw new Error(
+          `Voice note exceeds maximum duration of ${MAX_VOICE_NOTE_DURATION} seconds.`
+        );
       }
 
       const voicePath = `${Date.now()}-${voiceNote.name}`;
@@ -61,6 +64,7 @@ export function TributeForm({ mode, tribute }: Props) {
       );
     }
 
+    // ===== PROCESS COVER IMAGE =====
     if (images.length > 0) {
       const coverPath = `${Date.now()}-${images[0].name}`;
       coverImageUrl = await uploadPublicFile(
@@ -70,6 +74,7 @@ export function TributeForm({ mode, tribute }: Props) {
       );
     }
 
+    // ===== SUBMIT TRIBUTE =====
     const res = await fetch("/api/tributes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -86,11 +91,12 @@ export function TributeForm({ mode, tribute }: Props) {
 
     if (!res.ok) {
       const data = await res.json();
-      throw new Error(data.error || "Submission failed.");
+      throw new Error(data.error || "Failed to submit tribute. Please try again.");
     }
 
-    const { id: tributeId } = await res.json(); // get the ID back
+    const { id: tributeId } = await res.json();
 
+    // ===== PROCESS ADDITIONAL IMAGES =====
     if (images.length > 1 && tributeId) {
       for (let i = 1; i < images.length; i++) {
         const path = `${tributeId}/${Date.now()}-${images[i].name}`;
@@ -101,11 +107,20 @@ export function TributeForm({ mode, tribute }: Props) {
         );
 
         if (imageUrl) {
-          await supabase.from("tribute_images").insert({
-            tribute_id: tributeId,
-            image_url: imageUrl,
-            order: i,
-          });
+          const { error: insertError } = await supabase
+            .from("tribute_images")
+            .insert({
+              tribute_id: tributeId,
+              image_url: imageUrl,
+              order: i,
+            });
+
+          if (insertError) {
+            console.error(
+              `[tribute-form] Failed to insert image ${i} for tribute ${tributeId}:`,
+              insertError.message
+            );
+          }
         }
       }
     }
