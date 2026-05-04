@@ -13,10 +13,7 @@ const ipSubmissions = new Map<string, { count: number; windowStart: number }>();
 // ===== RATE LIMITING UTILITIES =====
 function getClientIp(req: NextRequest): string {
   const forwarded = req.headers.get("x-forwarded-for");
-  if (forwarded) {
-    return forwarded.split(",")[0]?.trim() ?? "unknown";
-  }
-  return req.ip ?? "unknown";
+  return forwarded ? forwarded.split(",")[0]?.trim() ?? "unknown" : "unknown";
 }
 
 function isRateLimited(ip: string): boolean {
