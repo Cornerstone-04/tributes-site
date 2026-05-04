@@ -33,11 +33,11 @@ export default async function TributesPage() {
         description="Words from family and friends celebrating one hundred years of life."
       />
 
-      <div className="px-6 pb-16">
+      <div className="px-4 md:px-6 pb-12 md:pb-16">
         <SectionDivider />
       </div>
 
-      <section className="mx-auto max-w-6xl px-6 pb-32">
+      <section className="mx-auto max-w-6xl px-4 md:px-6 pb-24 md:pb-32">
         {tributesWithImages.length === 0 ? (
           <EmptyState
             title="No tributes yet."

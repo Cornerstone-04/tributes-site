@@ -34,27 +34,27 @@ export function PhotoStrip() {
   const doubled = [...urls, ...urls];
 
   return (
-    <section className="overflow-hidden py-16 border-y border-accent/15 bg-muted/40">
+    <section className="overflow-hidden py-12 md:py-16 border-y border-accent/15 bg-muted/40 px-4 md:px-6">
       <motion.p
         initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.7 }}
-        className="mb-10 text-center font-sans text-xs uppercase tracking-[0.35em] text-accent"
+        className="mb-8 md:mb-10 text-center font-sans text-xs uppercase tracking-[0.35em] text-accent"
       >
         A Life in Photographs
       </motion.p>
 
-      <div className="relative w-full overflow-hidden">
+      <div className="relative w-full overflow-hidden -mx-4 md:-mx-6">
         <div
           ref={trackRef}
-          className="flex gap-4 animate-scroll"
+          className="flex gap-3 md:gap-4 animate-scroll"
           style={{ width: "max-content" }}
         >
           {doubled.map((url, i) => (
             <div
               key={i}
-              className="h-56 w-44 shrink-0 overflow-hidden border border-[#d8c39a] bg-white/60 p-1.5 shadow-sm rotate-[-0.5deg] odd:rotate-[0.5deg]"
+              className="h-40 md:h-56 w-32 md:w-44 shrink-0 overflow-hidden border border-[#d8c39a] bg-white/60 p-1 md:p-1.5 shadow-sm rotate-[-0.5deg] odd:rotate-[0.5deg]"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={url} alt="" className="h-full w-full object-cover" />

@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 
 export function HeroSection() {
   return (
-    <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-20 text-center">
+    <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 md:px-6 pt-24 md:pt-20 text-center">
       <motion.div
         aria-hidden="true"
         className="absolute inset-0 pointer-events-none"

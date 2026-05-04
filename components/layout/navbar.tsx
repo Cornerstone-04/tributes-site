@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "motion/react";
+import { MobileMenu } from "./mobile-menu";
 
 export function Navbar() {
   return (
@@ -9,13 +10,14 @@ export function Navbar() {
       initial={{ y: -24, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-5 bg-background/80 backdrop-blur-sm border-b border-border"
+      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-8 py-4 md:py-5 bg-background/80 backdrop-blur-sm border-b border-border"
     >
-      <span className="text-sm tracking-[0.2em] uppercase text-accent font-sans font-medium">
+      <span className="text-xs md:text-sm tracking-[0.2em] uppercase text-accent font-sans font-medium">
         Olusola · 100
       </span>
 
-      <div className="flex gap-6 text-sm font-sans">
+      {/* Desktop Navigation */}
+      <div className="hidden md:flex gap-6 text-sm font-sans">
         <Link
           href="/tributes"
           className="text-foreground/60 hover:text-accent transition-colors tracking-wide"
@@ -32,6 +34,9 @@ export function Navbar() {
           </Link>
         </motion.div>
       </div>
+
+      {/* Mobile Navigation */}
+      <MobileMenu />
     </motion.nav>
   );
 }

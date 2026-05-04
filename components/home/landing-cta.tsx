@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 
 export function LandingCta() {
   return (
-    <section className="relative mx-auto max-w-3xl px-6 py-28 text-center">
+    <section className="relative mx-auto max-w-3xl px-4 md:px-6 py-16 md:py-28 text-center">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}

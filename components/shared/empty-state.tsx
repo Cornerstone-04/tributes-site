@@ -16,12 +16,12 @@ export function EmptyState({
   ctaLabel,
 }: EmptyStateProps) {
   return (
-    <div className="py-28 text-center">
-      <p className="mb-4 text-4xl">{icon}</p>
+    <div className="py-16 md:py-28 px-4 text-center">
+      <p className="mb-4 text-3xl md:text-4xl">{icon}</p>
 
-      <p className="mb-2 font-heading text-xl text-primary/50">{title}</p>
+      <p className="mb-2 font-heading text-lg md:text-xl text-primary/50">{title}</p>
 
-      <p className="mb-8 font-sans text-sm text-foreground/35">{description}</p>
+      <p className="mb-6 md:mb-8 font-sans text-sm text-foreground/35">{description}</p>
 
       {ctaHref && ctaLabel ? (
         <Link
