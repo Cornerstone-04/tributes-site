@@ -36,6 +36,7 @@ export default async function TributesPage({
         showDefaultLinks={false}
       />
 
+      <div className="pointer-events-none absolute inset-x-0 top-10 mx-auto h-96 w-96 rounded-full bg-accent/8 blur-3xl" />
       <PageIntro
         eyebrow="From those who love him"
         title="Tributes & Memories"
