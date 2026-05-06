@@ -1,42 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
 import { motion } from "motion/react";
 
+const photos = [
+  "/images/1926.jpg",
+  "/images/30-50.jpg",
+  "/images/62-96(1).jpg",
+  "/images/62-96(2).jpg",
+  "/images/62-96.jpg",
+  "/images/68-03.jpg",
+  "/images/84.jpg",
+  "/images/scotland.jpg",
+  "/images/26-legacy.jpg",
+  "/images/family.jpg",
+  "/images/event.jpg",
+  "/images/grandkids.jpg",
+  "/images/father-son.jpg",
+  "/images/family(2).jpg",
+];
+
 export function PhotoStrip() {
-  const [urls, setUrls] = useState<string[]>([]);
-
-  useEffect(() => {
-    async function loadPhotos() {
-      const { data, error } = await supabase.storage
-        .from("site-gallery")
-        .list("", {
-          limit: 24,
-          sortBy: { column: "name", order: "asc" },
-        });
-
-      if (error || !data) return;
-
-      const publicUrls = data
-        .filter((file) => file.name && !file.name.startsWith("."))
-        .map((file) => {
-          const { data } = supabase.storage
-            .from("site-gallery")
-            .getPublicUrl(file.name);
-
-          return data.publicUrl;
-        });
-
-      setUrls(publicUrls);
-    }
-
-    loadPhotos();
-  }, []);
-
-  if (urls.length === 0) return null;
-
-  const doubled = [...urls, ...urls];
+  const doubled = [...photos, ...photos];
 
   return (
     <section className="relative overflow-hidden border-y border-accent/15 bg-muted/40 py-14 md:py-20">
@@ -54,16 +38,21 @@ export function PhotoStrip() {
 
       <div className="relative z-10 w-full overflow-hidden">
         <div className="pointer-events-none absolute left-0 top-0 z-20 h-full w-20 bg-linear-to-r from-muted/90 to-transparent md:w-36" />
+
         <div className="pointer-events-none absolute right-0 top-0 z-20 h-full w-20 bg-linear-to-l from-muted/90 to-transparent md:w-36" />
 
         <div className="flex w-max gap-4 animate-scroll md:gap-5">
-          {doubled.map((url, i) => (
+          {doubled.map((url, index) => (
             <motion.figure
-              key={`${url}-${i}`}
-              whileHover={{ y: -8, scale: 1.03, rotate: 0 }}
+              key={`${url}-${index}`}
+              whileHover={{
+                y: -8,
+                scale: 1.03,
+                rotate: 0,
+              }}
               transition={{ duration: 0.25, ease: "easeOut" }}
               className={`shrink-0 overflow-hidden border border-accent/25 bg-[#f8f0dc] p-2 shadow-[0_12px_30px_rgba(28,20,16,0.12)] ${
-                i % 2 === 0 ? "-rotate-1" : "rotate-1"
+                index % 2 === 0 ? "-rotate-1" : "rotate-1"
               }`}
             >
               <div className="overflow-hidden bg-background">

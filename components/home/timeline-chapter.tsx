@@ -101,7 +101,7 @@ export function TimelineChapter({ chapter, index }: Props) {
                 <img
                   src={chapter.image}
                   alt={chapter.imageAlt ?? chapter.heading}
-                  className="aspect-4/5 h-90 w-full object-cover transition-transform duration-500 hover:scale-105"
+                  className="aspect-4/5 w-full object-cover transition-transform duration-500 hover:scale-105"
                 />
               </div>
             </div>

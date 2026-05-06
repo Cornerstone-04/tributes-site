@@ -1,5 +1,5 @@
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import { Tribute, TributeImage } from "@/types";
+import { Tribute, TributeImage, TributeStatus } from "@/types";
 import { supabase } from "./supabase";
 
 type PaginatedTributesResult = {
@@ -9,6 +9,52 @@ type PaginatedTributesResult = {
   page: number;
   pageSize: number;
 };
+
+export async function getAdminTributesByStatus({
+  status,
+  page = 1,
+  pageSize = 10,
+}: {
+  status: TributeStatus;
+  page?: number;
+  pageSize?: number;
+}): Promise<PaginatedTributesResult> {
+  const safePage = Math.max(1, page);
+  const safePageSize = Math.max(1, pageSize);
+
+  const from = (safePage - 1) * safePageSize;
+  const to = from + safePageSize - 1;
+
+  const { data, error, count } = await supabaseAdmin
+    .from("tributes")
+    .select("*", { count: "exact" })
+    .eq("status", status)
+    .order("featured", { ascending: false })
+    .order("created_at", { ascending: false })
+    .range(from, to);
+
+  if (error) {
+    console.error(`[admin] Error fetching ${status} tributes:`, error);
+
+    return {
+      tributes: [],
+      totalCount: 0,
+      totalPages: 0,
+      page: safePage,
+      pageSize: safePageSize,
+    };
+  }
+
+  const totalCount = count ?? 0;
+
+  return {
+    tributes: data ?? [],
+    totalCount,
+    totalPages: Math.ceil(totalCount / safePageSize),
+    page: safePage,
+    pageSize: safePageSize,
+  };
+}
 
 export async function getApprovedTributes({
   page = 1,
