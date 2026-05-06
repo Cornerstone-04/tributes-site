@@ -3,10 +3,10 @@ import { TimelineChapter } from "./timeline-chapter";
 
 export function TimelineSection() {
   return (
-    <section className="relative mx-auto max-w-5xl px-6 py-24">
+    <section className="relative mx-auto max-w-5xl px-4 md:px-6 py-16 md:py-24">
       <div className="absolute top-0 bottom-0 left-1/2 hidden w-px -translate-x-1/2 bg-accent/20 md:block" />
 
-      <div className="space-y-32">
+      <div className="space-y-16 md:space-y-32">
         {LANDING_CHAPTERS.map((chapter, index) => (
           <TimelineChapter
             key={`${chapter.year}-${chapter.label}`}

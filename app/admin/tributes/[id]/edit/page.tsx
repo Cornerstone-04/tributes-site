@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { getTributeById } from "@/lib/tributes";
 import { AdminPageNav } from "@/components/admin/admin-page-nav";
 import { TributeForm } from "@/components/tribute/tribute-form";
+import { PageIntro } from "@/components/shared/page-intro";
+import { SectionDivider } from "@/components/shared/section-divider";
 
 export default async function AdminEditTributePage({
   params,
@@ -14,31 +16,23 @@ export default async function AdminEditTributePage({
   if (!tribute) notFound();
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <main className="relative min-h-screen overflow-hidden bg-background text-foreground">
       <AdminPageNav />
 
-      <section className="mx-auto max-w-2xl px-6 py-16">
-        <div className="mb-14 text-center">
-          <p className="mb-4 font-sans text-xs uppercase tracking-[0.35em] text-accent">
-            Editing Tribute
-          </p>
+      <div className="pointer-events-none absolute inset-x-0 top-20 mx-auto h-96 w-96 rounded-full bg-accent/10 blur-3xl" />
 
-          <h1 className="mb-4 font-heading text-4xl text-primary">
-            Update Tribute
-          </h1>
+      <PageIntro
+        eyebrow="Editing Tribute"
+        title="Update Tribute"
+        description="Make changes to the tribute, then save to update the record."
+      />
 
-          <p className="mx-auto max-w-md font-sans text-sm text-foreground/50">
-            Make changes to the tribute, then save to update the record.
-          </p>
+      <SectionDivider />
 
-          <div className="mt-8 flex items-center justify-center gap-4">
-            <div className="h-px w-16 bg-accent/40" />
-            <span className="text-accent">✦</span>
-            <div className="h-px w-16 bg-accent/40" />
-          </div>
+      <section className="relative z-10 mx-auto max-w-3xl px-4 py-8 md:px-6 md:py-10">
+        <div className="border border-accent/15 bg-[#f8f0dc]/35 p-5 shadow-[0_18px_45px_rgba(28,20,16,0.08)] md:p-8">
+          <TributeForm mode="edit" tribute={tribute} />
         </div>
-
-        <TributeForm mode="edit" tribute={tribute} />
       </section>
     </main>
   );

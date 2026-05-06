@@ -21,77 +21,95 @@ export function TimelineChapter({ chapter, index }: Props) {
   const isEven = index % 2 === 0;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: isEven ? -24 : 24, y: 24 }}
-      whileInView={{ opacity: 1, x: 0, y: 0 }}
-      viewport={{ once: true, amount: 0.45 }}
-      transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-      className={`relative flex flex-col items-center gap-12 md:flex-row ${
-        isEven ? "md:flex-row" : "md:flex-row-reverse"
-      }`}
+    <motion.article
+      initial={{ opacity: 0, y: 34 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.35 }}
+      transition={{ duration: 0.75, ease: "easeOut" }}
+      className="relative grid gap-10 md:grid-cols-[1fr_72px_1fr] md:gap-8"
     >
-      <div className="absolute left-1/2 z-10 hidden -translate-x-1/2 md:flex flex-col items-center gap-1">
+      {/* Timeline center */}
+      <div className="absolute left-4 top-0 h-full w-px bg-accent/20 md:left-1/2 md:-translate-x-1/2" />
+
+      <div className="absolute left-4 top-2 z-10 -translate-x-1/2 md:left-1/2">
         <motion.div
-          whileInView={{ scale: [0.8, 1.3, 1] }}
-          viewport={{ once: true, amount: 0.6 }}
+          initial={{ scale: 0.6 }}
+          whileInView={{ scale: [0.6, 1.25, 1] }}
+          viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.55, ease: "easeOut" }}
-          className="h-3 w-3 rounded-full border-2 border-accent bg-background"
-        />
+          className="grid h-9 w-9 place-items-center rounded-full border border-accent/30 bg-background shadow-[0_0_0_8px_rgba(248,240,220,0.9)]"
+        >
+          <span className="h-3 w-3 rounded-full bg-accent" />
+        </motion.div>
       </div>
 
+      {/* Text */}
       <div
-        className={`flex-1 ${
-          isEven ? "md:pr-16 md:text-right" : "md:pl-16 md:text-left"
+        className={`pl-12 md:pl-0 ${
+          isEven
+            ? "md:col-start-1 md:text-right"
+            : "md:col-start-3 md:text-left"
         }`}
       >
-        <p className="mb-2 font-sans text-xs tracking-[0.3em] uppercase text-accent">
+        <p className="mb-3 font-sans text-xs font-medium uppercase tracking-[0.32em] text-accent">
           {chapter.label}
         </p>
 
-        <p className="mb-3 font-heading text-5xl leading-none text-primary/10">
+        <p className="mb-2 font-heading text-6xl leading-none text-primary/10 md:text-7xl">
           {chapter.year}
         </p>
 
-        <h2 className="mb-4 font-heading text-2xl leading-snug text-primary md:text-3xl">
+        <h2 className="max-w-md font-heading text-2xl leading-tight text-primary md:text-4xl">
           {chapter.heading}
         </h2>
 
-        <p className="mx-auto max-w-sm font-sans text-base leading-relaxed text-foreground/60 md:mx-0">
+        <p
+          className={`mt-5 max-w-md font-sans text-base leading-8 text-foreground/65 ${
+            isEven ? "md:ml-auto" : ""
+          }`}
+        >
           {chapter.body}
         </p>
 
-        <p className="mt-4 font-heading text-sm italic text-accent/70">
+        <p className="mt-5 font-heading text-base italic text-accent/75">
           {chapter.accent}
         </p>
       </div>
-      <div className="flex-1">
+
+      {/* Spacer column */}
+      <div className="hidden md:col-start-2 md:block" />
+
+      {/* Image */}
+      <div
+        className={`pl-12 md:pl-0 ${
+          isEven ? "md:col-start-3" : "md:col-start-1 md:row-start-1"
+        }`}
+      >
         {chapter.image ? (
           <motion.div
-            whileHover={{
-              y: -6,
-              scale: 1.02,
-              rotate: 0,
-            }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-            className={`mx-auto w-full max-w-sm ${
-              isEven ? "-rotate-2" : "rotate-2"
+            whileHover={{ y: -8, scale: 1.025, rotate: 0 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className={`relative mx-auto max-w-sm ${
+              isEven ? "md:rotate-2" : "md:-rotate-2"
             }`}
           >
-            <div className="border border-accent/25 bg-[#f8f0dc] p-2 shadow-[0_12px_28px_rgba(28,20,16,0.12)]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={chapter.image}
-                alt={chapter.imageAlt ?? chapter.heading}
-                className="h-72 w-full object-cover"
-              />
+            <div className="absolute -inset-3 -z-10 rounded-sm bg-accent/10 blur-xl" />
+
+            <div className="rounded-sm border border-accent/25 bg-[#f8f0dc] p-3 shadow-[0_18px_45px_rgba(28,20,16,0.16)]">
+              <div className="overflow-hidden rounded-xs bg-background">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={chapter.image}
+                  alt={chapter.imageAlt ?? chapter.heading}
+                  className="aspect-4/5 h-90 w-full object-cover transition-transform duration-500 hover:scale-105"
+                />
+              </div>
             </div>
           </motion.div>
         ) : (
           <div className="hidden md:block" />
         )}
       </div>
-
-      <div className="hidden flex-1 md:block" />
-    </motion.div>
+    </motion.article>
   );
 }

@@ -16,21 +16,18 @@ type TributeGridProps = {
 export function TributeGrid({ tributes }: TributeGridProps) {
   const [selectedTribute, setSelectedTribute] =
     useState<TributeWithImages | null>(null);
-  const [open, setOpen] = useState(false);
 
   function handleOpenTribute(tribute: TributeWithImages) {
     setSelectedTribute(tribute);
-    setOpen(true);
   }
 
-  function handleOpenChange(nextOpen: boolean) {
-    setOpen(nextOpen);
-    if (!nextOpen) setSelectedTribute(null);
+  function handleOpenChange(open: boolean) {
+    if (!open) setSelectedTribute(null);
   }
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-10 lg:grid-cols-3">
         {tributes.map((tribute, index) => (
           <TributeCard
             key={tribute.id}
@@ -44,7 +41,7 @@ export function TributeGrid({ tributes }: TributeGridProps) {
       <TributeModal
         tribute={selectedTribute}
         images={selectedTribute?.images ?? []}
-        open={open}
+        open={Boolean(selectedTribute)}
         modalOpenAction={handleOpenChange}
       />
     </>

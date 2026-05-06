@@ -3,91 +3,155 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Tribute } from "@/types";
-import { supabase } from "@/lib/supabase";
+
+type AdminActionState = {
+  loading: boolean;
+  error: string | null;
+};
+
+const INITIAL_STATE: AdminActionState = {
+  loading: false,
+  error: null,
+};
 
 export function AdminActions({ tribute }: { tribute: Tribute }) {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const [state, setState] = useState<AdminActionState>(INITIAL_STATE);
 
-  async function update(fields: Partial<Tribute>) {
-    setLoading(true);
+  async function updateTribute(
+    fields: Partial<Pick<Tribute, "status" | "featured">>,
+  ) {
+    setState({ loading: true, error: null });
 
-    const { error } = await supabase
-      .from("tributes")
-      .update(fields)
-      .eq("id", tribute.id);
+    try {
+      const response = await fetch(`/api/admin/tributes/${tribute.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(fields),
+      });
 
-    setLoading(false);
+      const result = await response.json();
 
-    if (error) {
-      console.error("Update tribute error:", error);
-      alert(error.message);
-      return;
+      if (!response.ok) {
+        setState({
+          loading: false,
+          error: result.error || "Failed to update tribute. Please try again.",
+        });
+        return;
+      }
+
+      router.refresh();
+      setState(INITIAL_STATE);
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "An unexpected error occurred.";
+
+      console.error("[admin-actions] Update error:", message);
+
+      setState({
+        loading: false,
+        error: "Failed to update tribute. Please try again.",
+      });
     }
-
-    router.refresh();
   }
 
   async function deleteTribute() {
-    if (!confirm("Delete this tribute? This cannot be undone.")) return;
+    const confirmDelete = window.confirm(
+      "Delete this tribute? This action cannot be undone.",
+    );
 
-    setLoading(true);
+    if (!confirmDelete) return;
 
-    const { error } = await supabase
-      .from("tributes")
-      .delete()
-      .eq("id", tribute.id);
+    setState({ loading: true, error: null });
 
-    setLoading(false);
+    try {
+      const response = await fetch(`/api/admin/tributes/${tribute.id}`, {
+        method: "DELETE",
+      });
 
-    if (error) {
-      console.error("Delete tribute error:", error);
-      alert(error.message);
-      return;
+      const result = await response.json();
+
+      if (!response.ok) {
+        setState({
+          loading: false,
+          error: result.error || "Failed to delete tribute. Please try again.",
+        });
+        return;
+      }
+
+      router.push("/admin");
+      router.refresh();
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "An unexpected error occurred.";
+
+      console.error("[admin-actions] Delete error:", message);
+
+      setState({
+        loading: false,
+        error: "Failed to delete tribute. Please try again.",
+      });
     }
+  }
 
-    router.refresh();
+  async function toggleFeatured() {
+    await updateTribute({ featured: !tribute.featured });
+  }
+
+  async function toggleApprovalStatus() {
+    const newStatus: Tribute["status"] =
+      tribute.status === "pending" ? "approved" : "pending";
+
+    await updateTribute({ status: newStatus });
   }
 
   return (
-    <div className="flex items-center gap-2">
-      {tribute.status === "pending" ? (
+    <div className="space-y-3">
+      <div className="flex flex-wrap items-center gap-2">
         <button
-          onClick={() => update({ status: "approved" })}
-          disabled={loading}
-          className="text-xs font-sans text-green-700 border border-green-200 bg-green-50 px-3 py-1 hover:bg-green-100 transition-colors disabled:opacity-50"
+          onClick={toggleApprovalStatus}
+          disabled={state.loading}
+          className={`border px-3 py-1 font-sans text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
+            tribute.status === "pending"
+              ? "border-green-200 bg-green-50 text-green-700 hover:bg-green-100"
+              : "border-foreground/20 text-foreground/60 hover:border-foreground/40"
+          }`}
         >
-          Approve
+          {tribute.status === "pending" ? "✓ Approve" : "↻ Unpublish"}
         </button>
-      ) : (
+
         <button
-          onClick={() => update({ status: "pending" })}
-          disabled={loading}
-          className="text-xs font-sans text-[#1C1410]/40 border border-[#C9A96E]/20 px-3 py-1 hover:border-[#C9A96E]/50 transition-colors disabled:opacity-50"
+          onClick={toggleFeatured}
+          disabled={state.loading}
+          aria-pressed={tribute.featured}
+          className={`border px-3 py-1 font-sans text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
+            tribute.featured
+              ? "border-accent/30 bg-accent/5 text-accent hover:bg-accent/10"
+              : "border-foreground/20 text-foreground/40 hover:border-foreground/40"
+          }`}
         >
-          Unpublish
+          {tribute.featured ? "★ Featured" : "☆ Feature"}
         </button>
-      )}
 
-      <button
-        onClick={() => update({ featured: !tribute.featured })}
-        disabled={loading}
-        className={`text-xs font-sans px-3 py-1 border transition-colors disabled:opacity-50 ${
-          tribute.featured
-            ? "text-[#8B6914] border-[#8B6914]/30 bg-[#8B6914]/5 hover:bg-[#8B6914]/10"
-            : "text-[#1C1410]/30 border-[#C9A96E]/20 hover:border-[#C9A96E]/50"
-        }`}
-      >
-        {tribute.featured ? "★ Featured" : "☆ Feature"}
-      </button>
+        <button
+          onClick={deleteTribute}
+          disabled={state.loading}
+          className="font-sans text-xs text-red-600 transition-colors hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          Delete
+        </button>
+      </div>
 
-      <button
-        onClick={deleteTribute}
-        disabled={loading}
-        className="text-xs font-sans text-red-400 hover:text-red-600 transition-colors disabled:opacity-50"
-      >
-        Delete
-      </button>
+      {state.error ? (
+        <div
+          className="border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700"
+          role="alert"
+        >
+          {state.error}
+        </div>
+      ) : null}
     </div>
   );
 }

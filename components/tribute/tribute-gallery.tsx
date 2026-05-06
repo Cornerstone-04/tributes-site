@@ -1,4 +1,5 @@
 import { TributeImage } from "@/types";
+import { ModalImage } from "./modal-image";
 
 type TributeGalleryProps = {
   images: TributeImage[];
@@ -16,8 +17,7 @@ export function TributeGallery({ images }: TributeGalleryProps) {
       <div className="grid grid-cols-2 gap-3">
         {images.map((img) => (
           <div key={img.id} className="overflow-hidden">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <ModalImage
               src={img.image_url}
               alt={img.caption ?? ""}
               className="h-52 w-full object-cover transition-transform duration-500 hover:scale-105"

@@ -46,14 +46,18 @@ export function TributeForm({ mode, tribute }: Props) {
     let voiceNoteDuration: number | null = null;
     let coverImageUrl: string | null = null;
 
+    // ===== PROCESS VOICE NOTE =====
     if (voiceNote) {
       voiceNoteDuration = await getAudioDuration(voiceNote);
 
       if (voiceNoteDuration > MAX_VOICE_NOTE_DURATION) {
-        throw new Error("Voice note exceeds 3 minutes.");
+        throw new Error(
+          `Voice note exceeds maximum duration of ${MAX_VOICE_NOTE_DURATION} seconds.`,
+        );
       }
 
       const voicePath = `${Date.now()}-${voiceNote.name}`;
+
       voiceNoteUrl = await uploadPublicFile(
         "voice-notes",
         voiceNote,
@@ -61,8 +65,10 @@ export function TributeForm({ mode, tribute }: Props) {
       );
     }
 
+    // ===== PROCESS COVER IMAGE =====
     if (images.length > 0) {
       const coverPath = `${Date.now()}-${images[0].name}`;
+
       coverImageUrl = await uploadPublicFile(
         "tribute-images",
         images[0],
@@ -70,9 +76,12 @@ export function TributeForm({ mode, tribute }: Props) {
       );
     }
 
-    const res = await fetch("/api/tributes", {
+    // ===== CREATE TRIBUTE FIRST =====
+    const response = await fetch("/api/tributes", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         full_name: form.full_name.trim(),
         relationship: form.relationship.trim() || null,
@@ -84,29 +93,46 @@ export function TributeForm({ mode, tribute }: Props) {
       }),
     });
 
-    if (!res.ok) {
-      const data = await res.json();
-      throw new Error(data.error || "Submission failed.");
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        result.error || "Failed to submit tribute. Please try again.",
+      );
     }
 
-    const { id: tributeId } = await res.json(); // get the ID back
+    const tributeId = result.id as string | undefined;
 
-    if (images.length > 1 && tributeId) {
+    if (!tributeId) {
+      throw new Error("Tribute was created, but no tribute ID was returned.");
+    }
+
+    // ===== PROCESS ADDITIONAL IMAGES AFTER TRIBUTE EXISTS =====
+    if (images.length > 1) {
+      const imageRows = [];
+
       for (let i = 1; i < images.length; i++) {
-        const path = `${tributeId}/${Date.now()}-${images[i].name}`;
+        const path = `${tributeId}/${Date.now()}-${i}-${images[i].name}`;
+
         const imageUrl = await uploadPublicFile(
           "tribute-images",
           images[i],
           path,
         );
 
-        if (imageUrl) {
-          await supabase.from("tribute_images").insert({
-            tribute_id: tributeId,
-            image_url: imageUrl,
-            order: i,
-          });
-        }
+        imageRows.push({
+          tribute_id: tributeId,
+          image_url: imageUrl,
+          order: i,
+        });
+      }
+
+      const { error: insertImagesError } = await supabase
+        .from("tribute_images")
+        .insert(imageRows);
+
+      if (insertImagesError) {
+        throw insertImagesError;
       }
     }
 
@@ -127,6 +153,7 @@ export function TributeForm({ mode, tribute }: Props) {
       }
 
       const voicePath = `${Date.now()}-${voiceNote.name}`;
+
       voiceNoteUrl = await uploadPublicFile(
         "voice-notes",
         voiceNote,
@@ -136,6 +163,7 @@ export function TributeForm({ mode, tribute }: Props) {
 
     if (images.length > 0) {
       const coverPath = `${Date.now()}-${images[0].name}`;
+
       coverImageUrl = await uploadPublicFile(
         "tribute-images",
         images[0],
@@ -162,16 +190,18 @@ export function TributeForm({ mode, tribute }: Props) {
     router.refresh();
   }
 
-  async function handleSubmit(e: React.SyntheticEvent) {
-    e.preventDefault();
+  async function handleSubmit(event: React.SyntheticEvent) {
+    event.preventDefault();
 
     const validationError = validateTributeForm(form);
+
     if (validationError) {
       setError(validationError);
       return;
     }
 
     const voiceFileError = validateVoiceNoteFile(voiceNote);
+
     if (voiceFileError) {
       setError(voiceFileError);
       return;
@@ -209,7 +239,7 @@ export function TributeForm({ mode, tribute }: Props) {
         <input
           type="text"
           value={form.full_name}
-          onChange={(e) => setField("full_name", e.target.value)}
+          onChange={(event) => setField("full_name", event.target.value)}
           placeholder="Your full name"
           className={inputClass}
         />
@@ -219,7 +249,7 @@ export function TributeForm({ mode, tribute }: Props) {
         <input
           type="text"
           value={form.relationship}
-          onChange={(e) => setField("relationship", e.target.value)}
+          onChange={(event) => setField("relationship", event.target.value)}
           placeholder="e.g. Granddaughter, Friend, Colleague"
           className={inputClass}
         />
@@ -229,7 +259,7 @@ export function TributeForm({ mode, tribute }: Props) {
         <input
           type="text"
           value={form.title}
-          onChange={(e) => setField("title", e.target.value)}
+          onChange={(event) => setField("title", event.target.value)}
           placeholder="A short title for your tribute (optional)"
           className={inputClass}
         />
@@ -238,11 +268,12 @@ export function TributeForm({ mode, tribute }: Props) {
       <TributeFormField label="Your Tribute" required>
         <textarea
           value={form.message}
-          onChange={(e) => setField("message", e.target.value)}
+          onChange={(event) => setField("message", event.target.value)}
           rows={8}
           placeholder="Share your memory, message, or story…"
           className={`${inputClass} resize-none`}
         />
+
         <p className="mt-1.5 text-right font-sans text-xs text-foreground/30">
           {form.message.length} / {MAX_MESSAGE}
         </p>

@@ -11,6 +11,7 @@ import { Tribute, TributeImage } from "@/types";
 import { VoiceNotePlayer } from "@/components/tribute/voice-note-player";
 import { TributeGallery } from "@/components/tribute/tribute-gallery";
 import { XIcon } from "lucide-react";
+import { ModalImage } from "./modal-image";
 
 type TributeModalProps = {
   tribute: Tribute | null;
@@ -27,10 +28,8 @@ export function TributeModal({
 }: TributeModalProps) {
   if (!tribute) return null;
 
-  const hasMedia =
-    Boolean(tribute.cover_image_url) ||
-    images.length > 0 ||
-    Boolean(tribute.voice_note_url);
+  const hasVisualMedia = Boolean(tribute.cover_image_url) || images.length > 0;
+  const hasVoiceNote = Boolean(tribute.voice_note_url);
 
   return (
     <Dialog open={open} onOpenChange={modalOpenAction}>
@@ -83,20 +82,18 @@ export function TributeModal({
           {/* Body — two-column when media exists, single column otherwise */}
           <div
             className={`mt-10 ${
-              hasMedia
+              hasVisualMedia
                 ? "grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12"
                 : "mx-auto max-w-2xl"
             }`}
           >
             {/* LEFT — media */}
-            {hasMedia && (
+            {hasVisualMedia && (
               <div className="space-y-6">
                 {tribute.cover_image_url && (
                   <div className="overflow-hidden rounded-sm border border-[#d8c39a] bg-white/40 p-2 shadow-[0_8px_24px_rgba(28,20,16,0.08)]">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                    <ModalImage
                       src={tribute.cover_image_url}
-                      alt=""
                       className="h-auto max-h-80 w-full object-cover"
                     />
                   </div>
@@ -104,13 +101,13 @@ export function TributeModal({
 
                 {images.length > 0 && <TributeGallery images={images} />}
 
-                {tribute.voice_note_url && (
+                {hasVoiceNote && (
                   <div className="border border-[#c9a96e]/30 bg-white/45 p-6 shadow-[0_8px_24px_rgba(28,20,16,0.06)]">
                     <p className="mb-4 font-sans text-xs uppercase tracking-[0.25em] text-[#8b6914]">
                       Voice Note
                     </p>
                     <VoiceNotePlayer
-                      url={tribute.voice_note_url}
+                      url={tribute.voice_note_url!}
                       duration={tribute.voice_note_duration}
                     />
                   </div>
@@ -125,19 +122,18 @@ export function TributeModal({
               </p>
 
               {/* Voice note goes here too if NO images, so it stays with text */}
-              {!tribute.cover_image_url &&
-                images.length === 0 &&
-                tribute.voice_note_url && (
-                  <div className="mt-8 border border-[#c9a96e]/30 bg-white/45 p-6 shadow-[0_8px_24px_rgba(28,20,16,0.06)]">
-                    <p className="mb-4 font-sans text-xs uppercase tracking-[0.25em] text-[#8b6914]">
-                      Voice Note
-                    </p>
-                    <VoiceNotePlayer
-                      url={tribute.voice_note_url}
-                      duration={tribute.voice_note_duration}
-                    />
-                  </div>
-                )}
+              {!hasVisualMedia && hasVoiceNote && (
+                <div className="mt-8 border border-[#c9a96e]/30 bg-white/45 p-6 shadow-[0_8px_24px_rgba(28,20,16,0.06)]">
+                  <p className="mb-4 font-sans text-xs uppercase tracking-[0.25em] text-[#8b6914]">
+                    Voice Note
+                  </p>
+
+                  <VoiceNotePlayer
+                    url={tribute.voice_note_url!}
+                    duration={tribute.voice_note_duration}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

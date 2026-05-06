@@ -1,30 +1,39 @@
-import { PageNav } from "@/components/layout/page-navbar";
+import { Navbar } from "@/components/layout/navbar";
 import { PageIntro } from "@/components/shared/page-intro";
 import { SectionDivider } from "@/components/shared/section-divider";
 import { EmptyState } from "@/components/shared/empty-state";
+import { Pagination } from "@/components/shared/pagination";
 import { TributeGrid } from "@/components/tribute/tribute-grid";
-import { getApprovedTributes, getTributeImages } from "@/lib/tributes";
+import { getApprovedTributes } from "@/lib/tributes";
 
-export default async function TributesPage() {
-  const tributes = await getApprovedTributes();
+type TributesPageProps = {
+  searchParams?: Promise<{
+    page?: string;
+  }>;
+};
 
-  const tributesWithImages = await Promise.all(
-    tributes.map(async (tribute) => {
-      const images = await getTributeImages(tribute.id);
-      return {
-        ...tribute,
-        images,
-      };
-    }),
-  );
+export default async function TributesPage({
+  searchParams,
+}: TributesPageProps) {
+  const params = await searchParams;
+
+  const page = Number(params?.page ?? "1");
+  const currentPage = Number.isFinite(page) && page > 0 ? page : 1;
+
+  const { tributes, totalCount, totalPages } = await getApprovedTributes({
+    page: currentPage,
+    pageSize: 12,
+  });
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <PageNav
+      <Navbar
+        fixed={false}
         backHref="/"
         backLabel="← Olusola · 100"
         actionHref="/tributes/new"
         actionLabel="Write a Tribute"
+        showDefaultLinks={false}
       />
 
       <PageIntro
@@ -33,12 +42,12 @@ export default async function TributesPage() {
         description="Words from family and friends celebrating one hundred years of life."
       />
 
-      <div className="px-6 pb-16">
+      <div className="px-4 pb-12 md:px-6 md:pb-16">
         <SectionDivider />
       </div>
 
-      <section className="mx-auto max-w-6xl px-6 pb-32">
-        {tributesWithImages.length === 0 ? (
+      <section className="mx-auto max-w-6xl px-4 pb-24 md:px-6 md:pb-32">
+        {tributes.length === 0 ? (
           <EmptyState
             title="No tributes yet."
             description="Be the first to share a memory."
@@ -46,7 +55,19 @@ export default async function TributesPage() {
             ctaLabel="Write a Tribute"
           />
         ) : (
-          <TributeGrid tributes={tributesWithImages} />
+          <>
+            <p className="mb-8 text-center font-sans text-xs uppercase tracking-[0.22em] text-foreground/40">
+              Showing {tributes.length} of {totalCount} tributes
+            </p>
+
+            <TributeGrid tributes={tributes} />
+
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              basePath="/tributes"
+            />
+          </>
         )}
       </section>
     </main>

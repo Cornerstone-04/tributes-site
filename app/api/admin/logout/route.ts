@@ -6,8 +6,10 @@ export async function POST() {
 
   cookieStore.set("admin_session", "", {
     httpOnly: true,
-    expires: new Date(0),
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
     path: "/",
+    maxAge: 0,
   });
 
   return NextResponse.json({ success: true });

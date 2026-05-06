@@ -19,7 +19,7 @@ const garamond = localFont({
       weight: "700",
       style: "normal",
     },
-  ],  
+  ],
   variable: "--font-heading",
   display: "swap",
 });

@@ -1,37 +1,33 @@
+import { Navbar } from "@/components/layout/navbar";
+import { PageIntro } from "@/components/shared/page-intro";
+import { SectionDivider } from "@/components/shared/section-divider";
 import { TributeForm } from "@/components/tribute/tribute-form";
-import Link from "next/link";
 
 export default function NewTributePage() {
   return (
-    <main className="bg-[#FAF7F2] text-[#1C1410] min-h-screen font-serif">
-      <nav className="flex items-center justify-between px-8 py-5 border-b border-[#C9A96E]/20">
-        <Link
-          href="/"
-          className="text-sm tracking-[0.2em] uppercase text-[#8B6914] font-sans font-medium"
-        >
-          ← Olusola · 100
-        </Link>
-      </nav>
+    <main className="relative min-h-screen overflow-hidden bg-background text-foreground">
+      <Navbar
+        fixed={false}
+        backHref="/"
+        backLabel="← Olusola · 100"
+        actionHref="/tributes"
+        actionLabel="Tributes"
+        showDefaultLinks={false}
+      />
 
-      <section className="max-w-2xl mx-auto px-6 py-20">
-        <div className="text-center mb-14">
-          <p className="text-xs tracking-[0.35em] uppercase text-[#8B6914] font-sans mb-4">
-            Share your memory
-          </p>
-          <h1 className="text-4xl font-serif text-[#1C1410] mb-4">
-            Write a Tribute
-          </h1>
-          <p className="text-[#1C1410]/50 font-sans font-light text-base max-w-sm mx-auto">
-            Your words will become part of a keepsake Baba will carry forever.
-          </p>
-          <div className="flex items-center justify-center gap-4 mt-8">
-            <div className="h-px w-16 bg-[#C9A96E]/40" />
-            <span className="text-[#C9A96E]">✦</span>
-            <div className="h-px w-16 bg-[#C9A96E]/40" />
-          </div>
+      <div className="pointer-events-none absolute inset-x-0 top-10 mx-auto h-96 w-96 rounded-full bg-accent/8 blur-3xl" />
+      <PageIntro
+        eyebrow="Share your memory"
+        title="Write a Tribute"
+        description="Your words will become part of a keepsake Baba will carry forever."
+      />
+
+      <SectionDivider />
+
+      <section className="relative z-10 mx-auto max-w-3xl px-4 py-8 md:px-6 md:py-10">
+        <div className="border border-accent/15 bg-[#f8f0dc]/35 p-5 shadow-[0_18px_45px_rgba(28,20,16,0.08)] md:p-8">
+          <TributeForm mode="create" />
         </div>
-
-        <TributeForm mode="create" />
       </section>
     </main>
   );

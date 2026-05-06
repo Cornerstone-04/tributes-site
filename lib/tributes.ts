@@ -1,24 +1,62 @@
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 import { Tribute, TributeImage } from "@/types";
+import { supabase } from "./supabase";
 
-export async function getApprovedTributes(): Promise<Tribute[]> {
-  const { data, error } = await supabase
+type PaginatedTributesResult = {
+  tributes: Tribute[];
+  totalCount: number;
+  totalPages: number;
+  page: number;
+  pageSize: number;
+};
+
+export async function getApprovedTributes({
+  page = 1,
+  pageSize = 12,
+}: {
+  page?: number;
+  pageSize?: number;
+} = {}): Promise<PaginatedTributesResult> {
+  const safePage = Math.max(1, page);
+  const safePageSize = Math.max(1, pageSize);
+
+  const from = (safePage - 1) * safePageSize;
+  const to = from + safePageSize - 1;
+
+  const { data, error, count } = await supabase
     .from("tributes")
-    .select("*, images:tribute_images(*)")
+    .select("*, images:tribute_images(*)", { count: "exact" })
     .eq("status", "approved")
     .order("featured", { ascending: false })
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .range(from, to);
 
   if (error) {
     console.error("Error fetching approved tributes:", error);
-    return [];
+
+    return {
+      tributes: [],
+      totalCount: 0,
+      totalPages: 0,
+      page: safePage,
+      pageSize: safePageSize,
+    };
   }
 
-  return data ?? [];
+  const totalCount = count ?? 0;
+  const totalPages = Math.ceil(totalCount / safePageSize);
+
+  return {
+    tributes: data ?? [],
+    totalCount,
+    totalPages,
+    page: safePage,
+    pageSize: safePageSize,
+  };
 }
 
 export async function getAllTributes(): Promise<Tribute[]> {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin
     .from("tributes")
     .select("*")
     .order("created_at", { ascending: false });
@@ -32,7 +70,7 @@ export async function getAllTributes(): Promise<Tribute[]> {
 }
 
 export async function getTributeById(id: string): Promise<Tribute | null> {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin
     .from("tributes")
     .select("*")
     .eq("id", id)
@@ -67,7 +105,7 @@ export async function getApprovedTributeById(
 export async function getTributeImages(
   tributeId: string,
 ): Promise<TributeImage[]> {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin
     .from("tribute_images")
     .select("*")
     .eq("tribute_id", tributeId)
@@ -82,7 +120,7 @@ export async function getTributeImages(
 }
 
 export async function approveTribute(id: string): Promise<boolean> {
-  const { error } = await supabase
+  const { error } = await supabaseAdmin
     .from("tributes")
     .update({ status: "approved" })
     .eq("id", id);
@@ -96,7 +134,7 @@ export async function approveTribute(id: string): Promise<boolean> {
 }
 
 export async function unpublishTribute(id: string): Promise<boolean> {
-  const { error } = await supabase
+  const { error } = await supabaseAdmin
     .from("tributes")
     .update({ status: "pending" })
     .eq("id", id);
@@ -113,7 +151,7 @@ export async function toggleFeaturedTribute(
   id: string,
   featured: boolean,
 ): Promise<boolean> {
-  const { error } = await supabase
+  const { error } = await supabaseAdmin
     .from("tributes")
     .update({ featured })
     .eq("id", id);
@@ -127,7 +165,7 @@ export async function toggleFeaturedTribute(
 }
 
 export async function deleteTribute(id: string): Promise<boolean> {
-  const { error } = await supabase.from("tributes").delete().eq("id", id);
+  const { error } = await supabaseAdmin.from("tributes").delete().eq("id", id);
 
   if (error) {
     console.error(`Error deleting tribute ${id}:`, error);
