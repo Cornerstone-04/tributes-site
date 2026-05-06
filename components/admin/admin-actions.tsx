@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { XIcon } from "lucide-react";
+import { Check, Star, Trash, XIcon } from "lucide-react";
 import { Tribute } from "@/types";
 import {
   Dialog,
@@ -121,13 +121,17 @@ export function AdminActions({ tribute }: { tribute: Tribute }) {
             type="button"
             onClick={toggleApprovalStatus}
             disabled={state.loading}
-            className={`border px-3 py-2 font-sans text-xs font-medium uppercase tracking-[0.14em] transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
+            className={`border px-3 py-2 font-sans text-xs font-medium capitalize tracking-[0.14em] transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
               tribute.status === "pending"
                 ? "border-green-500/25 bg-green-500/10 text-green-700 hover:bg-green-500/15"
                 : "border-foreground/20 text-foreground/60 hover:border-foreground/40"
             }`}
           >
-            {tribute.status === "pending" ? "Approve" : "Unpublish"}
+            {tribute.status === "pending" ? (
+              <Check size={16} />
+            ) : (
+              <XIcon size={16} />
+            )}
           </button>
 
           <button
@@ -137,11 +141,11 @@ export function AdminActions({ tribute }: { tribute: Tribute }) {
             aria-pressed={tribute.featured}
             className={`border px-3 py-2 font-sans text-xs font-medium uppercase tracking-[0.14em] transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
               tribute.featured
-                ? "border-accent/30 bg-accent/10 text-accent hover:bg-accent/15"
+                ? "border-accent/30 bg-background text-accent hover:bg-accent/15"
                 : "border-foreground/20 text-foreground/45 hover:border-foreground/40"
             }`}
           >
-            {tribute.featured ? "Featured" : "Feature"}
+            <Star size={16} />
           </button>
 
           <button
@@ -153,7 +157,7 @@ export function AdminActions({ tribute }: { tribute: Tribute }) {
             disabled={state.loading}
             className="border border-red-500/25 px-3 py-2 font-sans text-xs font-medium uppercase tracking-[0.14em] text-red-700 transition-colors hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Delete
+            <Trash size={16} />
           </button>
         </div>
 

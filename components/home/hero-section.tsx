@@ -117,7 +117,7 @@ export function HeroSection() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.1, duration: 1 }}
-        className="absolute bottom-10 z-10 flex flex-col items-center gap-2 text-white/60"
+        className="absolute bottom-10 z-10 hidden md:flex flex-col items-center gap-2 text-white/60"
       >
         <span className="font-sans text-xs uppercase tracking-[0.2em]">
           Scroll

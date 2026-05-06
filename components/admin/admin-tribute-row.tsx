@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Tribute } from "@/types";
 import { AdminActions } from "@/components/admin/admin-actions";
+import { Eye, SquarePen } from "lucide-react";
 
 type AdminTributeRowProps = {
   tribute: Tribute;
@@ -42,20 +43,22 @@ export function AdminTributeRow({ tribute }: AdminTributeRowProps) {
         </p>
       </div>
 
-      <div className="flex shrink-0 items-center gap-3">
-        <Link
-          href={`/admin/tributes/${tribute.id}`}
-          className="font-sans text-xs tracking-wide text-accent hover:underline"
-        >
-          View
-        </Link>
+      <div className="flex shrink-0 items-center justify-between gap-3">
+        <div className="flex gap-4 items-center">
+          <Link
+            href={`/admin/tributes/${tribute.id}`}
+            className="font-sans text-xs tracking-wide text-accent hover:underline"
+          >
+            <Eye />
+          </Link>
 
-        <Link
-          href={`/admin/tributes/${tribute.id}/edit`}
-          className="font-sans text-xs tracking-wide text-foreground/40 hover:text-accent"
-        >
-          Edit
-        </Link>
+          <Link
+            href={`/admin/tributes/${tribute.id}/edit`}
+            className="font-sans text-xs tracking-wide text-foreground/40 hover:text-accent"
+          >
+            <SquarePen />
+          </Link>
+        </div>
 
         <AdminActions tribute={tribute} />
       </div>
