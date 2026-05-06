@@ -142,7 +142,7 @@ export function AdminActions({ tribute }: { tribute: Tribute }) {
             className={`border px-3 py-2 font-sans text-xs font-medium uppercase tracking-[0.14em] transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
               tribute.featured
                 ? "border-accent/30 bg-background text-accent hover:bg-accent/15"
-                : "border-foreground/20 text-foreground/45 hover:border-foreground/40"
+                : "border-foreground/20 text-foreground/45 hover:bg-background hover:border-accent/30"
             }`}
           >
             <Star size={16} />
