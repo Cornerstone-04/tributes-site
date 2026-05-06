@@ -42,41 +42,37 @@ const gotham = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Celebrating 100 Years | Papa Olusola Ajolore",
+  title: "Celebrating 100 Years | Pa Olusola Ajolore",
   description:
-    "A tribute website celebrating 100 years of life, legacy, and impact. Share your memories, messages, and moments.",
-
+    "A centennial tribute celebrating the life, legacy, wisdom, and enduring impact of Pa Olusola Ajolore. Explore photographs, memories, voice notes, and heartfelt tributes shared by family and friends across generations.",
   openGraph: {
-    title: "Celebrating 100 Years | Papa Olusola Ajolore",
+    title: "Pa Olusola at 100",
     description:
-      "Join us in celebrating a remarkable 100-year journey filled with love, legacy, and unforgettable memories.",
+      "Celebrating a century of life, love, family, faith, and legacy.",
     url: "https://your-domain.com",
-    siteName: "Papa Olusola Ajolore Tribute",
+    siteName: "Pa Olusola Ajolore Tribute",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Celebrating 100 Years",
+        alt: "Celebrating 100 Years of Pa Olusola Ajolore",
       },
     ],
     locale: "en_US",
     type: "website",
   },
-
   twitter: {
     card: "summary_large_image",
-    title: "Celebrating 100 Years | Papa Olusola Ajolore",
+    title: "Celebrating 100 Years | Pa Olusola Ajolore",
     description:
-      "A tribute to a life well lived. Explore memories and share your own.",
+      "A centennial tribute honoring the life and legacy of Pa Olusola Ajolore.",
     images: ["/og-image.jpg"],
   },
-
   icons: {
     icon: "/favicon.ico",
   },
 };
-
 export default function RootLayout({
   children,
 }: Readonly<{

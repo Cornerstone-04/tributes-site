@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "motion/react";
+import Image from "next/image";
+import { useState } from "react";
 
 type Chapter = {
   year: string;
@@ -97,11 +99,9 @@ export function TimelineChapter({ chapter, index }: Props) {
 
             <div className="rounded-sm border border-accent/25 bg-[#f8f0dc] p-3 shadow-[0_18px_45px_rgba(28,20,16,0.16)]">
               <div className="overflow-hidden rounded-xs bg-background">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <ImageWithSkeleton
                   src={chapter.image}
                   alt={chapter.imageAlt ?? chapter.heading}
-                  className="aspect-4/5 w-full object-cover transition-transform duration-500 hover:scale-105"
                 />
               </div>
             </div>
@@ -111,5 +111,28 @@ export function TimelineChapter({ chapter, index }: Props) {
         )}
       </div>
     </motion.article>
+  );
+}
+
+function ImageWithSkeleton({ src, alt }: { src: string; alt: string }) {
+  const [loaded, setLoaded] = useState(false);
+
+  return (
+    <div className="relative h-72 w-full overflow-hidden bg-[#efe4c8]">
+      {!loaded ? (
+        <div className="absolute inset-0 z-10 animate-pulse bg-[linear-gradient(110deg,#efe4c8_8%,#f7efd9_18%,#efe4c8_33%)] bg-size-[200%_100%]" />
+      ) : null}
+
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes="(max-width: 768px) 100vw, 400px"
+        onLoad={() => setLoaded(true)}
+        className={`object-cover transition-opacity duration-700 ${
+          loaded ? "opacity-100" : "opacity-0"
+        }`}
+      />
+    </div>
   );
 }

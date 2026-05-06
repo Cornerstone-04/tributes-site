@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import { useRef, useState } from "react";
 
 const photos = [
   "/images/1926.jpg",
@@ -20,6 +21,9 @@ const photos = [
 ];
 
 export function PhotoStrip() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [paused, setPaused] = useState(false);
+
   const doubled = [...photos, ...photos];
 
   return (
@@ -31,41 +35,62 @@ export function PhotoStrip() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.7, ease: "easeOut" }}
-        className="relative z-10 mb-9 text-center font-sans text-xs font-medium uppercase tracking-[0.35em] text-accent md:mb-12"
+        className="relative z-10 mb-3 text-center font-sans text-xs font-medium uppercase tracking-[0.35em] text-accent"
       >
         A Life in Photographs
       </motion.p>
 
-      <div className="relative z-10 w-full overflow-hidden">
-        <div className="pointer-events-none absolute left-0 top-0 z-20 h-full w-20 bg-linear-to-r from-muted/90 to-transparent md:w-36" />
+      <p className="relative z-10 mb-9 text-center font-sans text-xs text-foreground/40 md:mb-12">
+        Swipe, scroll, or hover to pause the gallery
+      </p>
 
-        <div className="pointer-events-none absolute right-0 top-0 z-20 h-full w-20 bg-linear-to-l from-muted/90 to-transparent md:w-36" />
+      <div className="relative z-10 w-full">
+        <div className="pointer-events-none absolute left-0 top-0 z-20 h-full w-12 bg-linear-to-r from-muted/90 to-transparent md:w-28" />
+        <div className="pointer-events-none absolute right-0 top-0 z-20 h-full w-12 bg-linear-to-l from-muted/90 to-transparent md:w-28" />
 
-        <div className="flex w-max gap-4 animate-scroll md:gap-5">
-          {doubled.map((url, index) => (
-            <motion.figure
-              key={`${url}-${index}`}
-              whileHover={{
-                y: -8,
-                scale: 1.03,
-                rotate: 0,
-              }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
-              className={`shrink-0 overflow-hidden border border-accent/25 bg-[#f8f0dc] p-2 shadow-[0_12px_30px_rgba(28,20,16,0.12)] ${
-                index % 2 === 0 ? "-rotate-1" : "rotate-1"
-              }`}
-            >
-              <div className="overflow-hidden bg-background">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={url}
-                  alt=""
-                  loading="lazy"
-                  className="h-44 w-34 object-cover transition-transform duration-500 hover:scale-105 md:h-60 md:w-48"
-                />
-              </div>
-            </motion.figure>
-          ))}
+        <div
+          ref={scrollRef}
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+          onTouchStart={() => setPaused(true)}
+          onTouchEnd={() => setPaused(false)}
+          onPointerDown={() => setPaused(true)}
+          onPointerUp={() => setPaused(false)}
+          onFocus={() => setPaused(true)}
+          onBlur={() => setPaused(false)}
+          className="scrollbar-hide overflow-x-auto overflow-y-hidden px-6 pb-6 pt-3 md:px-10"
+        >
+          <div
+            className={`flex w-max gap-4 md:gap-5 ${
+              paused ? "animate-scroll-paused" : "animate-scroll"
+            }`}
+          >
+            {doubled.map((url, index) => (
+              <motion.figure
+                key={`${url}-${index}`}
+                whileHover={{
+                  y: -8,
+                  scale: 1.03,
+                  rotate: 0,
+                }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+                className={`shrink-0 overflow-hidden border border-accent/25 bg-[#f8f0dc] p-2 shadow-[0_12px_30px_rgba(28,20,16,0.12)] ${
+                  index % 2 === 0 ? "-rotate-1" : "rotate-1"
+                }`}
+              >
+                <div className="overflow-hidden bg-background">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={url}
+                    alt=""
+                    loading="lazy"
+                    className="h-44 w-34 object-cover transition-transform duration-500 hover:scale-105 md:h-60 md:w-48"
+                  />
+                </div>
+              </motion.figure>
+            ))}
+          </div>
         </div>
       </div>
     </section>
