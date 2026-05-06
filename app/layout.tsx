@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     siteName: "Pa Olusola Ajolore Tribute",
     images: [
       {
-        url: "https://pajolore100.vercel.app/og-image.jpg",
+        url: "https://pajolore100.vercel.app/og-image-v2.jpg",
         width: 1200,
         height: 630,
         alt: "Celebrating 100 Years of Pa Olusola Ajolore",
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     title: "Celebrating 100 Years | Pa Olusola Ajolore",
     description:
       "A centennial tribute honoring the life and legacy of Pa Olusola Ajolore.",
-    images: ["https://pajolore100.vercel.app/og-image.jpg"],
+    images: ["https://pajolore100.vercel.app/og-image-v2.jpg"],
   },
   icons: {
     icon: "/favicon.ico",
