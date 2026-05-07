@@ -60,6 +60,7 @@ export async function POST(req: NextRequest) {
       .insert({
         full_name: body.full_name,
         relationship: body.relationship || null,
+        location: body.location || null,
         title: body.title || null,
         message: body.message,
         status: "pending",

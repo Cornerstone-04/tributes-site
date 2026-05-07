@@ -4,6 +4,7 @@ export type Tribute = {
   id: string;
   full_name: string;
   relationship: string | null;
+  location: string | null;
   title: string | null;
   message: string;
   status: TributeStatus;

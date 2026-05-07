@@ -27,6 +27,7 @@ export function TributeForm({ mode, tribute }: Props) {
   const [form, setForm] = useState<TributeFormValues>({
     full_name: tribute?.full_name ?? "",
     relationship: tribute?.relationship ?? "",
+    location: tribute?.location ?? "",
     title: tribute?.title ?? "",
     message: tribute?.message ?? "",
   });
@@ -85,6 +86,7 @@ export function TributeForm({ mode, tribute }: Props) {
       body: JSON.stringify({
         full_name: form.full_name.trim(),
         relationship: form.relationship.trim() || null,
+        location: form.location.trim() || null,
         title: form.title.trim() || null,
         message: form.message.trim(),
         voice_note_url: voiceNoteUrl,
@@ -178,6 +180,7 @@ export function TributeForm({ mode, tribute }: Props) {
         relationship: form.relationship.trim() || null,
         title: form.title.trim() || null,
         message: form.message.trim(),
+        location: form.location.trim() || null,
         voice_note_url: voiceNoteUrl,
         voice_note_duration: voiceNoteDuration,
         cover_image_url: coverImageUrl,
@@ -255,6 +258,16 @@ export function TributeForm({ mode, tribute }: Props) {
         />
       </TributeFormField>
 
+      <TributeFormField label="Location">
+        <input
+          type="text"
+          value={form.location}
+          onChange={(event) => setField("location", event.target.value)}
+          placeholder="e.g. Lagos, Nigeria"
+          className={inputClass}
+        />
+      </TributeFormField>
+
       <TributeFormField label="Title">
         <input
           type="text"
@@ -270,7 +283,7 @@ export function TributeForm({ mode, tribute }: Props) {
           value={form.message}
           onChange={(event) => setField("message", event.target.value)}
           rows={8}
-          placeholder="Share your memory, message, or story…"
+          placeholder="Share your memory, message, or story, e.g. where you met him, a favorite memory, how he impacted your life..."
           className={`${inputClass} resize-none`}
         />
 

@@ -129,7 +129,7 @@ function ImageWithSkeleton({ src, alt }: { src: string; alt: string }) {
         fill
         sizes="(max-width: 768px) 100vw, 400px"
         onLoad={() => setLoaded(true)}
-        className={`object-cover transition-opacity duration-700 ${
+        className={`object-cover object-top transition-opacity duration-700 ${
           loaded ? "opacity-100" : "opacity-0"
         }`}
       />

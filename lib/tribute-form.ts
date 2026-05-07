@@ -8,6 +8,7 @@ export const MAX_VOICE_NOTE_SIZE_BYTES = 15 * 1024 * 1024;
 export type TributeFormValues = {
   full_name: string;
   relationship: string;
+  location: string;
   title: string;
   message: string;
 };
@@ -15,6 +16,10 @@ export type TributeFormValues = {
 export function validateTributeForm(values: TributeFormValues): string | null {
   if (!values.full_name.trim()) {
     return "Full name is required.";
+  }
+
+  if (!values.location.trim()) {
+    return "Location is required.";
   }
 
   if (values.message.trim().length < MIN_MESSAGE) {

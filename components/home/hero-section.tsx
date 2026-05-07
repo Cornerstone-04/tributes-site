@@ -61,19 +61,18 @@ export function HeroSection() {
           transition={{ delay: 0.15, duration: 0.8 }}
           className="mb-6 font-sans text-xs uppercase tracking-[0.35em] text-[#f1d59a]"
         >
-          July 2026 · A Centennial Celebration
+          24th July 2026 · A Centennial Celebration
         </motion.p>
 
         <motion.h1
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25, duration: 0.9 }}
-          className="mb-6 font-heading text-[clamp(3.5rem,10vw,7rem)] leading-[1.02] text-white"
-          style={{ fontVariant: "small-caps" }}
+          className="mb-6 font-heading text-[clamp(3.5rem,10vw,7rem)] leading-[1.02] text-white [font-variant:small-caps]"
         >
-          One Hundred
+          100 years of
           <br />
-          <span className="text-[#f1d59a]">Years of Olusola</span>
+          <span className="text-[#f1d59a]">Pa. Olusola Ajolore</span>
         </motion.h1>
 
         <motion.p

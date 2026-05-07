@@ -32,8 +32,7 @@ export function TributeFormSuccess({ fullName }: TributeFormSuccessProps) {
         </h2>
 
         <p className="mx-auto max-w-md font-sans text-base leading-8 text-foreground/60">
-          Your tribute has been submitted and will appear once reviewed. We look
-          forward to celebrating Baba with you on July 24th.
+          Your tribute will be reviewed and added to the collection soon.
         </p>
 
         <div className="my-8 flex items-center justify-center gap-4">
@@ -48,7 +47,7 @@ export function TributeFormSuccess({ fullName }: TributeFormSuccessProps) {
           </p>
 
           <p className="font-sans text-sm leading-6 text-foreground/55">
-            Please RSVP for the celebration so the family can plan accordingly.
+            Kindly confirm your attendance, we&apos;d love to have you.
           </p>
 
           <motion.div
