@@ -15,7 +15,7 @@ type NavbarProps = {
 
 export function Navbar({
   backHref = "/",
-  backLabel = "Olusola · 100",
+  backLabel = "Pa Olusola Ajolore · 100",
   actionHref,
   actionLabel,
   fixed = true,

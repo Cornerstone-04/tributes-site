@@ -30,7 +30,7 @@ export default async function TributesPage({
       <Navbar
         fixed={false}
         backHref="/"
-        backLabel="← Olusola · 100"
+        backLabel="← Pa Olusola Ajolore · 100"
         actionHref="/tributes/new"
         actionLabel="Write a Tribute"
         showDefaultLinks={false}
@@ -40,7 +40,7 @@ export default async function TributesPage({
       <PageIntro
         eyebrow="From those who love him"
         title="Tributes & Memories"
-        description="Words from family and friends celebrating one hundred years of life."
+        description="Words from family and friends celebrating 100 years of God's faithfulness."
       />
 
       <div className="px-4 pb-12 md:px-6 md:pb-16">

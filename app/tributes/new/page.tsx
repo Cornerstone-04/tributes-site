@@ -9,7 +9,7 @@ export default function NewTributePage() {
       <Navbar
         fixed={false}
         backHref="/"
-        backLabel="← Olusola · 100"
+        backLabel="← Pa Olusola Ajolore · 100"
         actionHref="/tributes"
         actionLabel="Tributes"
         showDefaultLinks={false}
