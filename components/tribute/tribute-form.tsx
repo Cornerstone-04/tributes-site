@@ -248,7 +248,7 @@ export function TributeForm({ mode, tribute }: Props) {
         />
       </TributeFormField>
 
-      <TributeFormField label="Relationship to Olusola">
+      <TributeFormField label="Relationship to Pa Olusola">
         <input
           type="text"
           value={form.relationship}
